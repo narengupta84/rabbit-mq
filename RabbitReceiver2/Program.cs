@@ -4,11 +4,12 @@ using System.Text;
 
 ConnectionFactory factory = new();
 factory.Uri = new Uri("amqp://admin:AT63Ukv4@rabbitmq-125957-0.cloudclusters.net:10064");
-factory.ClientProvidedName = "Rabbit Receiver1 App";
+factory.ClientProvidedName = "Rabbit Receiver2 App";
 
 IConnection cnn = factory.CreateConnection();
 
 IModel channel = cnn.CreateModel();
+
 
 string exchangeName = "DemoExchange";
 string routingKey = "demo-routing-key";
@@ -22,7 +23,7 @@ channel.BasicQos(0, 1, false);
 var consumer = new EventingBasicConsumer(channel);
 consumer.Received += (sender, args) =>
 {
-    Task.Delay(TimeSpan.FromSeconds(5)).Wait();//Added this line to test other receiver too
+    Task.Delay(TimeSpan.FromSeconds(3)).Wait();//Added this line to test other receiver too
     var body = args.Body.ToArray();
 
     string messgae = Encoding.UTF8.GetString(body);
